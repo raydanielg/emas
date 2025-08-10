@@ -1,3 +1,52 @@
+# eMAS — Examination Marking and Results System
+
+eMAS is a focused system for supervising and semi-automating examination marking, and simplifying results compilation and publication. It aims to make the workflow fast, transparent, and maintainable.
+
+- Built with Laravel and modern, minimal UI (Tailwind CSS).
+- Development environment is pre-configured for local use.
+- Clear structure for extending modules (marking, moderation, reports, exports).
+
+> Note: This repository is prepared for development use. Production hardening (SSO, rate limiting, audit logs, etc.) is intentionally out of scope for now.
+
+## Getting Started (Development)
+
+1. Requirements: PHP 8.2+, Composer, SQLite/MySQL (optional), Git.
+2. Install dependencies:
+   - `composer install`
+3. Environment:
+   - Copy `.env.example` to `.env` and adjust `APP_URL`, database creds if needed.
+   - Generate key: `php artisan key:generate`.
+4. Run locally:
+   - `php artisan serve` (or) `php -S 0.0.0.0:8000 -t public/`.
+5. Open http://127.0.0.1:8000/login
+
+## Current Scope
+
+- UI: Custom sign-in and forgot-password pages (Tailwind).
+- Auth (UI only for now): username + password forms; backend wiring pending.
+- Branding: eMAS logo + SVG favicon.
+
+## Roadmap (High-level)
+
+- Authentication backed by database (username login).
+- Roles/permissions for markers, reviewers, and admins.
+- Marking workflows and moderation.
+- Results verification, exports, and dashboards.
+
+## Collaboration
+
+Created by: Ezra Daniel
+
+- Collaboration welcome. Fork the repo and open a Pull Request.
+- For coordination, reach out on WhatsApp: +255613976254
+- Issues and feature requests are also welcome via GitHub Issues.
+
+## License
+
+This project includes the Laravel framework, which is MIT licensed.
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

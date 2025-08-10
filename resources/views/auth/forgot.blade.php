@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'EMAS | Sahau Neno la Siri')
+@section('title', 'eMAS | Forgot Password')
 
 @section('content')
 <div class="w-full max-w-md">
@@ -9,21 +9,28 @@
       <img src="/logo-emas.svg" alt="eMAS" class="h-12 w-auto mb-3" />
       <h2 class="text-2xl font-bold tracking-wide text-gray-900 text-center">
         <span class="text-emas-green lowercase">e</span><span class="">MAS</span>
-        <span class="text-base font-medium text-gray-500 align-middle">— Rudisha Neno la Siri</span>
+        <span class="text-base font-medium text-gray-500 align-middle">— Forgot password</span>
       </h2>
     </div>
-    <form method="POST" action="#" role="form" class="space-y-4">
+    <form method="POST" action="#" role="form" class="space-y-5">
       {{-- @csrf --}}
       <div>
-        <label for="email" class="block text-sm font-semibold text-gray-900">Barua Pepe</label>
-        <input type="email" id="email" name="email" required placeholder="you@example.com"
-               class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emas-green focus:border-emas-green" />
+        <label for="identifier" class="block text-sm font-semibold text-gray-900">Username or Email</label>
+        <div class="relative mt-1">
+          <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <!-- User icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="M10 2a4 4 0 100 8 4 4 0 000-8z"/><path fill-rule="evenodd" d="M.458 16.042A9.956 9.956 0 0110 12c3.042 0 5.78 1.353 7.542 3.542A1 1 0 0116.9 17.4 8.004 8.004 0 0010 14a8.004 8.004 0 00-6.9 3.4 1 1 0 01-1.642-1.358z" clip-rule="evenodd"/></svg>
+          </span>
+          <input type="text" id="identifier" name="identifier" required placeholder="Enter your username or email"
+                 class="block w-full rounded-lg border border-gray-300 pl-10 pr-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emas-green focus:border-emas-green" />
+        </div>
       </div>
-      <button type="submit" class="w-full rounded-lg bg-emas-green hover:bg-emas-greenDark text-white font-semibold py-2.5 transition-colors shadow-sm">Tuma kiungo cha kurekebisha</button>
+      <button type="submit" class="w-full rounded-lg bg-emas-green hover:bg-emas-greenDark text-white font-semibold py-2.5 transition-colors shadow-sm">Send reset link</button>
     </form>
-    <p class="text-center text-sm text-gray-600 mt-5">
-      <a href="{{ url('/login') }}" class="font-semibold text-emas-yellow hover:underline">Rudi kwenye kuingia</a>
-    </p>
+    <div class="mt-5 flex items-center justify-between text-sm">
+      <a href="{{ url('/login') }}" class="font-semibold text-emas-green hover:text-emas-greenDark">Back to sign in</a>
+      <span class="text-gray-500">Need help? Contact Admin</span>
+    </div>
   </div>
 </div>
 @endsection
