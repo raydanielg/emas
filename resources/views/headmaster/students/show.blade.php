@@ -19,8 +19,9 @@
           <button class="px-3 py-1.5 border rounded bg-slate-50 hover:bg-white">Upload Photo</button>
         </form>
       </div>
+      @php($displayName = $student->name ?? $student->full_name ?? $student->student_name ?? $student->admission_number ?? ('ID '.$student->id))
       <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div><div class="text-xs text-slate-500">Name</div><div class="font-semibold">{{ $student->name }}</div></div>
+        <div><div class="text-xs text-slate-500">Name</div><div class="font-semibold">{{ $displayName }}</div></div>
         <div><div class="text-xs text-slate-500">Admission No</div><div class="font-semibold">{{ $student->admission_number }}</div></div>
         <div><div class="text-xs text-slate-500">Class</div><div class="font-semibold">{{ $student->class ?? '-' }}</div></div>
         <div><div class="text-xs text-slate-500">Gender</div><div class="font-semibold">{{ $student->gender ?? '-' }}</div></div>

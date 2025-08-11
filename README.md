@@ -15,6 +15,9 @@ eMAS is a focused system for supervising and semi-automating examination marking
 > Headmaster logins 
    username: headmaster1
    password: Pass@123
+ Headmaster login: email maugo.joas@demo.test, password Password123!
+Headmasters will redirect to /headmaster after login (as per your auth preference).
+Institution Profile will show the new school details and counts.
 
 ## Getting Started (Development)
 

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\EmasDemoSeeder;
+use Database\Seeders\DemoMaugoSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
         // Seed demo hierarchy, KWARAA school, subjects, students and marks
         $this->call([
             EmasDemoSeeder::class,
+            DemoMaugoSeeder::class,
         ]);
     }
 }

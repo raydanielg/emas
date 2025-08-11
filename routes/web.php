@@ -13,8 +13,23 @@ use App\Http\Controllers\FiltersController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\HeadmasterController;
 use App\Http\Controllers\HeadmasterPagesController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminPagesController;
 
 Route::get('/', function () { return redirect('/login'); });
+
+// Admin Panel
+Route::middleware(['web'])->prefix('admin')->name('admin.')->group(function () {
+    // Auth
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    // Protected admin pages
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/', [AdminPagesController::class, 'dashboard'])->name('dashboard');
+    });
+});
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -76,7 +91,7 @@ Route::middleware('auth')->group(function(){
     });
 
     // Headmaster Panel (role: headmaster)
-    Route::prefix('headmaster')->name('headmaster.')->group(function(){
+    Route::middleware(['web','auth'])->prefix('headmaster')->name('headmaster.')->group(function () {
         Route::get('/', [HeadmasterController::class, 'index'])->name('dashboard');
         Route::get('/upload', [HeadmasterController::class, 'uploadForm'])->name('upload');
         Route::post('/upload', [HeadmasterController::class, 'uploadStore'])->name('upload.store');
@@ -93,6 +108,13 @@ Route::middleware('auth')->group(function(){
         // Reports
         Route::get('/reports', [HeadmasterPagesController::class, 'reportsIndex'])->name('reports.index');
         Route::get('/reports/results', [HeadmasterPagesController::class, 'reportsResults'])->name('reports.results');
+        // Reports: Requests (create + rollback)
+        Route::get('/reports/requests/create', [\App\Http\Controllers\HeadmasterRequestsController::class, 'create'])->name('reports.requests.create');
+        Route::post('/reports/requests', [\App\Http\Controllers\HeadmasterRequestsController::class, 'store'])->name('reports.requests.store');
+        Route::get('/reports/requests/{id}', [\App\Http\Controllers\HeadmasterRequestsController::class, 'show'])->name('reports.requests.show');
+        Route::post('/reports/requests/{id}/cancel', [\App\Http\Controllers\HeadmasterRequestsController::class, 'cancel'])->name('reports.requests.cancel');
+        Route::get('/reports/requests/rollback', [\App\Http\Controllers\HeadmasterRequestsController::class, 'rollbackCreate'])->name('reports.requests.rollback.create');
+        Route::post('/reports/requests/rollback', [\App\Http\Controllers\HeadmasterRequestsController::class, 'rollbackStore'])->name('reports.requests.rollback.store');
 
         // Institution
         Route::get('/institution/profile', [HeadmasterPagesController::class, 'institutionProfile'])->name('institution.profile');
@@ -101,6 +123,7 @@ Route::middleware('auth')->group(function(){
 
         // Settings
         Route::get('/settings', [HeadmasterPagesController::class, 'settingsIndex'])->name('settings.index');
+        Route::post('/settings', [HeadmasterPagesController::class, 'settingsSave'])->name('settings.save');
 
         // Headmaster Profile (separate from general user settings)
         Route::get('/profile', [HeadmasterPagesController::class, 'profileShow'])->name('profile');
@@ -125,5 +148,30 @@ Route::middleware('auth')->group(function(){
         Route::get('/students/assign-subjects', [\App\Http\Controllers\HeadmasterStudentsController::class, 'assignSubjects'])->name('students.assign');
         Route::get('/students/{id}', [\App\Http\Controllers\HeadmasterStudentsController::class, 'showProfile'])->name('students.show');
         Route::delete('/students/{id}', [\App\Http\Controllers\HeadmasterStudentsController::class, 'destroy'])->name('students.destroy');
+
+        // Subjects management
+        Route::get('/subjects', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'index'])->name('subjects.index');
+        Route::post('/subjects', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'store'])->name('subjects.store');
+        Route::get('/subjects/{id}/edit', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'edit'])->name('subjects.edit');
+        Route::put('/subjects/{id}', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'update'])->name('subjects.update');
+        Route::get('/subjects/{id}', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'show'])->name('subjects.show');
+        Route::delete('/subjects/{id}', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'destroy'])->name('subjects.destroy');
+        Route::patch('/subjects/{id}/assign-teacher', [\App\Http\Controllers\HeadmasterSubjectsController::class, 'assignTeacher'])->name('subjects.assign_teacher');
+
+        // Teachers management
+        Route::get('/teachers', [\App\Http\Controllers\HeadmasterTeachersController::class, 'index'])->name('teachers.index');
+        Route::post('/teachers', [\App\Http\Controllers\HeadmasterTeachersController::class, 'store'])->name('teachers.store');
+        Route::patch('/teachers/{id}/assign-subject', [\App\Http\Controllers\HeadmasterTeachersController::class, 'assignSubject'])->name('teachers.assign_subject');
+
+        // Teacher proposals
+        Route::get('/teachers/proposals', [\App\Http\Controllers\HeadmasterTeachersController::class, 'proposalsIndex'])->name('teachers.proposals');
+        Route::post('/teachers/proposals', [\App\Http\Controllers\HeadmasterTeachersController::class, 'proposalsStore'])->name('teachers.proposals.store');
+        Route::get('/teachers/proposals/{id}', [\App\Http\Controllers\HeadmasterTeachersController::class, 'proposalsShow'])->name('teachers.proposals.show');
+
+        // Selected for Marking
+        Route::get('/teachers/selected', [\App\Http\Controllers\HeadmasterTeachersController::class, 'selectedIndex'])->name('teachers.selected');
+        Route::get('/teachers/selected/{id}', [\App\Http\Controllers\HeadmasterTeachersController::class, 'selectedShow'])->name('teachers.selected.show');
+        Route::post('/teachers/selected/{id}/generate-letter', [\App\Http\Controllers\HeadmasterTeachersController::class, 'selectedGenerateLetter'])->name('teachers.selected.generate_letter');
+        Route::get('/teachers/selected/{id}/letter', [\App\Http\Controllers\HeadmasterTeachersController::class, 'selectedViewLetter'])->name('teachers.selected.letter');
     });
 });

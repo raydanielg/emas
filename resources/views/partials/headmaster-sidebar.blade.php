@@ -9,6 +9,46 @@
     </a>
   </div>
 
+  @php $subjectsOpen = request()->routeIs('headmaster.subjects.*'); @endphp
+  <div class="mt-2">
+    <button type="button" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white menu-toggle {{ $subjectsOpen ? 'bg-white' : '' }}" aria-expanded="{{ $subjectsOpen ? 'true' : 'false' }}" data-target="#menu-subjects">
+      <span class="flex items-center gap-2"><i class="fa-solid fa-book"></i><span>Subjects</span></span>
+      <i class="fa-solid fa-chevron-down transition-transform duration-200 {{ $subjectsOpen ? 'rotate-180' : '' }}"></i>
+    </button>
+    <div id="menu-subjects" class="pl-3 mt-1 space-y-1 {{ $subjectsOpen ? '' : 'hidden' }}">
+      <a href="{{ route('headmaster.subjects.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.subjects.index') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-list"></i><span>All Subjects</span></a>
+    </div>
+  </div>
+
+  {{-- Teachers (dropdown) --}}
+  @php 
+    $teachersOpen = request()->routeIs('headmaster.teachers.*') || request()->routeIs('headmaster.teachers.proposals') || request()->routeIs('headmaster.teachers.selected');
+  @endphp
+  <div>
+    <button type="button" class="mt-1 w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white menu-toggle {{ $teachersOpen ? 'bg-white font-semibold text-emas-green' : '' }}" data-target="#menu-teachers">
+      <span class="flex items-center gap-2">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span>Teachers</span>
+      </span>
+      <i class="fa-solid fa-chevron-down transition-transform duration-200 {{ $teachersOpen ? 'rotate-180' : '' }}"></i>
+    </button>
+    <div id="menu-teachers" class="mt-1 ml-9 space-y-1 {{ $teachersOpen ? '' : 'hidden' }}">
+      <a href="{{ route('headmaster.teachers.index') }}" class="block px-3 py-1 rounded hover:bg-white {{ request()->routeIs('headmaster.teachers.index') ? 'bg-white font-semibold text-emas-green' : '' }}">
+        <span class="flex items-center gap-2"><i class="fa-regular fa-address-card"></i><span>Teachers</span></span>
+      </a>
+      @if(Route::has('headmaster.teachers.proposals'))
+      <a href="{{ route('headmaster.teachers.proposals') }}" class="block px-3 py-1 rounded hover:bg-white {{ request()->routeIs('headmaster.teachers.proposals') ? 'bg-white font-semibold text-emas-green' : '' }}">
+        <span class="flex items-center gap-2"><i class="fa-regular fa-file-lines"></i><span>Proposals</span></span>
+      </a>
+      @endif
+      @if(Route::has('headmaster.teachers.selected'))
+      <a href="{{ route('headmaster.teachers.selected') }}" class="block px-3 py-1 rounded hover:bg-white {{ request()->routeIs('headmaster.teachers.selected') ? 'bg-white font-semibold text-emas-green' : '' }}">
+        <span class="flex items-center gap-2"><i class="fa-solid fa-check-double"></i><span>Selected for Marking</span></span>
+      </a>
+      @endif
+    </div>
+  </div>
+
   {{-- Students (dropdown) --}}
   @php $studentsOpen = request()->routeIs('headmaster.students.*'); @endphp
   <div>
@@ -23,18 +63,7 @@
     </div>
   </div>
 
-  {{-- Teachers (dropdown) --}}
-  @php $teachersOpen = request()->routeIs('headmaster.teachers.*'); @endphp
-  <div>
-    <button type="button" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white menu-toggle" aria-expanded="{{ $teachersOpen ? 'true' : 'false' }}" data-target="#menu-teachers">
-      <span class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user"></i><span>Teachers</span></span>
-      <i class="fa-solid fa-chevron-down transition-transform duration-200 {{ $teachersOpen ? 'rotate-180' : '' }}"></i>
-    </button>
-    <div id="menu-teachers" class="pl-3 mt-1 space-y-1 {{ $teachersOpen ? '' : 'hidden' }}">
-      <a href="{{ route('headmaster.teachers.proposals') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.teachers.proposals') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-lightbulb"></i><span>Proposals</span></a>
-      <a href="{{ route('headmaster.teachers.selected') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.teachers.selected') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-check-double"></i><span>Selected for Marking</span></a>
-    </div>
-  </div>
+  
 
   {{-- Reports (dropdown) --}}
   @php $reportsOpen = request()->routeIs('headmaster.reports.*'); @endphp
@@ -46,6 +75,8 @@
     <div id="menu-reports" class="pl-3 mt-1 space-y-1 {{ $reportsOpen ? '' : 'hidden' }}">
       <a href="{{ route('headmaster.reports.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.reports.index') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-file-lines"></i><span>All Reports</span></a>
       <a href="{{ route('headmaster.reports.results') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.reports.results') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-square-poll-vertical"></i><span>Results Reports</span></a>
+      <a href="{{ route('headmaster.reports.requests.create') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.reports.requests.create') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-plus"></i><span>Create Request</span></a>
+      <a href="{{ route('headmaster.reports.requests.rollback.create') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.reports.requests.rollback.create') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-rotate-left"></i><span>Rollback Request</span></a>
     </div>
   </div>
 
@@ -57,32 +88,13 @@
       <i class="fa-solid fa-chevron-down transition-transform duration-200 {{ $instOpen ? 'rotate-180' : '' }}"></i>
     </button>
     <div id="menu-institution" class="pl-3 mt-1 space-y-1 {{ $instOpen ? '' : 'hidden' }}">
-      <a href="{{ route('headmaster.institution.profile') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.institution.profile') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-regular fa-id-card"></i><span>Profile</span></a>
+      <a href="{{ route('headmaster.institution.profile') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.institution.profile') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-regular fa-id-badge"></i><span>Profile</span></a>
       <a href="{{ route('headmaster.institution.manage') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.institution.manage') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-gear"></i><span>Manage</span></a>
       <a href="{{ route('headmaster.institution.performance') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.institution.performance') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-chart-line"></i><span>Overall Performance</span></a>
     </div>
   </div>
 
-  {{-- Support (single) --}}
-  <div>
-    <a href="{{ route('support.index') }}" class="mt-1 flex items-center justify-between px-3 py-2 rounded hover:bg-white">
-      <span class="flex items-center gap-2"><i class="fa-solid fa-headset"></i><span>Contact NECTA/Technical Support</span></span>
-    </a>
-  </div>
-
-  {{-- My Requests (dropdown) --}}
-  @php $reqOpen = request()->routeIs('headmaster.requests.*'); @endphp
-  <div>
-    <button type="button" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-white menu-toggle" aria-expanded="{{ $reqOpen ? 'true' : 'false' }}" data-target="#menu-requests">
-      <span class="flex items-center gap-2"><i class="fa-regular fa-envelope"></i><span>My Requests</span></span>
-      <i class="fa-solid fa-chevron-down transition-transform duration-200 {{ $reqOpen ? 'rotate-180' : '' }}"></i>
-    </button>
-    <div id="menu-requests" class="pl-3 mt-1 space-y-1 {{ $reqOpen ? '' : 'hidden' }}">
-      <a href="{{ route('headmaster.requests.pending') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.requests.pending') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-regular fa-clock"></i><span>Pending Requests</span></a>
-      <a href="{{ route('headmaster.requests.approved') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.requests.approved') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-circle-check"></i><span>Approved Requests</span></a>
-      <a href="{{ route('headmaster.requests.need_approval') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-white {{ request()->routeIs('headmaster.requests.need_approval') ? 'bg-white font-semibold text-emas-green' : '' }}"><i class="fa-solid fa-person-circle-question"></i><span>Need for Approval</span></a>
-    </div>
-  </div>
+  
 
   {{-- Settings (single) --}}
   <div>
