@@ -11,6 +11,8 @@ use App\Http\Controllers\SupportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FiltersController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\HeadmasterController;
+use App\Http\Controllers\HeadmasterPagesController;
 
 Route::get('/', function () { return redirect('/login'); });
 
@@ -71,5 +73,57 @@ Route::middleware('auth')->group(function(){
         Route::get('/api/assignments', [MarksController::class, 'assignments'])->name('api.assignments');
         Route::get('/api/recent', [MarksController::class, 'recent'])->name('api.recent');
         Route::get('/ca', function(){ return view('marking.ca'); })->name('ca');
+    });
+
+    // Headmaster Panel (role: headmaster)
+    Route::prefix('headmaster')->name('headmaster.')->group(function(){
+        Route::get('/', [HeadmasterController::class, 'index'])->name('dashboard');
+        Route::get('/upload', [HeadmasterController::class, 'uploadForm'])->name('upload');
+        Route::post('/upload', [HeadmasterController::class, 'uploadStore'])->name('upload.store');
+
+        // Students
+        Route::get('/students/register', [HeadmasterPagesController::class, 'studentsRegister'])->name('students.register');
+        Route::get('/students/manage', [HeadmasterPagesController::class, 'studentsManage'])->name('students.manage');
+        Route::get('/students', [HeadmasterPagesController::class, 'studentsIndex'])->name('students.index');
+
+        // Teachers
+        Route::get('/teachers/proposals', [HeadmasterPagesController::class, 'teachersProposals'])->name('teachers.proposals');
+        Route::get('/teachers/selected', [HeadmasterPagesController::class, 'teachersSelected'])->name('teachers.selected');
+
+        // Reports
+        Route::get('/reports', [HeadmasterPagesController::class, 'reportsIndex'])->name('reports.index');
+        Route::get('/reports/results', [HeadmasterPagesController::class, 'reportsResults'])->name('reports.results');
+
+        // Institution
+        Route::get('/institution/profile', [HeadmasterPagesController::class, 'institutionProfile'])->name('institution.profile');
+        Route::get('/institution/manage', [HeadmasterPagesController::class, 'institutionManage'])->name('institution.manage');
+        Route::get('/institution/performance', [HeadmasterPagesController::class, 'institutionPerformance'])->name('institution.performance');
+
+        // Settings
+        Route::get('/settings', [HeadmasterPagesController::class, 'settingsIndex'])->name('settings.index');
+
+        // Headmaster Profile (separate from general user settings)
+        Route::get('/profile', [HeadmasterPagesController::class, 'profileShow'])->name('profile');
+        Route::post('/profile', [HeadmasterPagesController::class, 'profileUpdate'])->name('profile.update');
+        Route::post('/profile/password', [\App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('password.update');
+        Route::post('/profile/suggestion', [HeadmasterPagesController::class, 'suggestionStore'])->name('suggestion.store');
+
+        // My Requests
+        Route::get('/requests/pending', [\App\Http\Controllers\HeadmasterRequestsController::class, 'pending'])->name('requests.pending');
+        Route::get('/requests/approved', [\App\Http\Controllers\HeadmasterRequestsController::class, 'approved'])->name('requests.approved');
+        Route::get('/requests/need-approval', [\App\Http\Controllers\HeadmasterRequestsController::class, 'needApproval'])->name('requests.need_approval');
+
+        // Students
+        Route::get('/students', [\App\Http\Controllers\HeadmasterStudentsController::class, 'index'])->name('students.index');
+        Route::get('/students/register', [\App\Http\Controllers\HeadmasterStudentsController::class, 'register'])->name('students.register');
+        Route::post('/students', [\App\Http\Controllers\HeadmasterStudentsController::class, 'storeManual'])->name('students.store');
+        Route::get('/students/template/{form}', [\App\Http\Controllers\HeadmasterStudentsController::class, 'downloadTemplate'])->name('students.template');
+        Route::get('/students/template-excel/{form}', [\App\Http\Controllers\HeadmasterStudentsController::class, 'downloadTemplateExcel'])->name('students.template_excel');
+        Route::post('/students/bulk-upload', [\App\Http\Controllers\HeadmasterStudentsController::class, 'bulkUpload'])->name('students.bulk_upload');
+        Route::patch('/students/{id}/subjects', [\App\Http\Controllers\HeadmasterStudentsController::class, 'updateSubjects'])->name('students.update_subjects');
+        Route::post('/students/{id}/photo', [\App\Http\Controllers\HeadmasterStudentsController::class, 'uploadImage'])->name('students.upload_image');
+        Route::get('/students/assign-subjects', [\App\Http\Controllers\HeadmasterStudentsController::class, 'assignSubjects'])->name('students.assign');
+        Route::get('/students/{id}', [\App\Http\Controllers\HeadmasterStudentsController::class, 'showProfile'])->name('students.show');
+        Route::delete('/students/{id}', [\App\Http\Controllers\HeadmasterStudentsController::class, 'destroy'])->name('students.destroy');
     });
 });

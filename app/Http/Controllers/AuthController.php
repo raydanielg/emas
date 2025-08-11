@@ -28,7 +28,7 @@ class AuthController extends Controller
         // Try to authenticate using username or email
         if (Auth::attempt([$field => $login, 'password' => $request->password], true)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            return redirect()->intended($this->roleRedirect(Auth::user()));
         }
 
         return back()->withErrors(['username' => 'Invalid credentials'])->withInput($request->only('username'));
@@ -40,5 +40,19 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
+    }
+
+    private function roleRedirect($user): string
+    {
+        $role = $user->role ?? '';
+        switch ($role) {
+            case 'headmaster':
+                return '/headmaster';
+            // Add more role-specific panels here as they are built
+            // case 'admin': return '/admin';
+            // case 'chairperson': return '/chair';
+            default:
+                return '/dashboard';
+        }
     }
 }

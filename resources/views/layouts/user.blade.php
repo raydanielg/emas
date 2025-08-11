@@ -140,7 +140,8 @@
             <button id="userMenuBtn" class="flex items-center gap-2 pl-1 pr-2 py-1.5 rounded-full hover:bg-white/10">
               @php $u = Auth::user(); $initials = $u ? collect(explode(' ', trim($u->name ?? 'U')))->map(fn($p)=>mb_substr($p,0,1))->join('') : 'U'; @endphp
               @if ($u && $u->avatar_path)
-                <img src="{{ asset('storage/'.$u->avatar_path) }}" alt="Avatar" class="h-9 w-9 rounded-full object-cover ring-1 ring-white/30">
+                @php $src = str_starts_with($u->avatar_path,'profiles/') ? asset('storage/'.$u->avatar_path) : asset($u->avatar_path); @endphp
+                <img src="{{ $src }}" alt="Avatar" class="h-9 w-9 rounded-full object-cover ring-1 ring-white/30">
               @else
                 <div class="h-9 w-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white font-bold flex items-center justify-center">{{ $initials }}</div>
               @endif

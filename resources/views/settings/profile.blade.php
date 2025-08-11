@@ -35,18 +35,45 @@
       <div class="flex flex-col sm:flex-row gap-6">
         <div class="shrink-0">
           <div class="w-28 h-28 rounded-full overflow-hidden ring-2 ring-emas-green/20 bg-slate-100">
-            @if ($user->avatar_path)
-              <img src="{{ asset('storage/'.$user->avatar_path) }}" alt="Avatar" class="w-full h-full object-cover">
+            @php
+              $currentPath = $user->avatar_path;
+              $currentSrc = $currentPath
+                ? (str_starts_with($currentPath,'profiles/') ? asset('storage/'.$currentPath) : asset($currentPath))
+                : null;
+            @endphp
+            @if ($currentSrc)
+              <img src="{{ $currentSrc }}" alt="Avatar" class="w-full h-full object-cover">
             @else
               <div class="w-full h-full flex items-center justify-center text-slate-400">
                 <i class="fa-regular fa-user text-4xl"></i>
               </div>
             @endif
           </div>
-          <label class="mt-3 inline-flex items-center gap-2 text-sm cursor-pointer">
-            <input type="file" name="avatar" accept="image/*" class="hidden" onchange="this.form.submit()">
-            <span class="px-3 py-1.5 rounded-md border border-slate-300 hover:bg-slate-50">Upload Photo</span>
-          </label>
+          <div class="mt-3 flex flex-col gap-2">
+            <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
+              <input type="file" name="avatar" accept="image/*" class="hidden" onchange="this.form.submit()">
+              <span class="px-3 py-1.5 rounded-md border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-upload mr-2"></i>Upload Photo</span>
+            </label>
+            <div class="text-xs text-slate-500">Or choose a preset:</div>
+            <div class="grid grid-cols-4 gap-2">
+              @php $presets = ['avatars/google/avatar1.svg','avatars/google/avatar2.svg']; @endphp
+              @foreach ($presets as $p)
+                <label class="relative cursor-pointer group">
+                  <input type="radio" name="avatar_choice" value="{{ $p }}" class="peer sr-only">
+                  <img src="{{ asset($p) }}" class="w-14 h-14 rounded-full ring-2 ring-transparent peer-checked:ring-emas-green object-cover" alt="preset">
+                </label>
+              @endforeach
+              <label class="relative cursor-pointer">
+                <input type="radio" name="avatar_choice" value="none" class="peer sr-only">
+                <div class="w-14 h-14 rounded-full ring-2 ring-transparent peer-checked:ring-emas-green bg-slate-100 flex items-center justify-center text-slate-500">
+                  <i class="fa-regular fa-user"></i>
+                </div>
+              </label>
+            </div>
+            <div>
+              <button type="submit" class="px-3 py-1.5 text-sm rounded-md border border-slate-300 hover:bg-slate-50">Save Avatar</button>
+            </div>
+          </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
           <div class="grid gap-1">

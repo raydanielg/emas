@@ -8,6 +8,14 @@ eMAS is a focused system for supervising and semi-automating examination marking
 
 > Note: This repository is prepared for development use. Production hardening (SSO, rate limiting, audit logs, etc.) is intentionally out of scope for now.
 
+## Login credential
+ > enteres of data logins:
+    username: demo@test.com
+    password: Password123!
+> Headmaster logins 
+   username: headmaster1
+   password: Pass@123
+
 ## Getting Started (Development)
 
 1. Requirements: PHP 8.2+, Composer, SQLite/MySQL (optional), Git.
