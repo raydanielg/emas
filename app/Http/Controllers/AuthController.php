@@ -48,8 +48,9 @@ class AuthController extends Controller
         switch ($role) {
             case 'headmaster':
                 return '/headmaster';
-            // Add more role-specific panels here as they are built
-            // case 'admin': return '/admin';
+            case 'admin':
+            case 'superadmin':
+                return '/admin';
             // case 'chairperson': return '/chair';
             default:
                 return '/dashboard';

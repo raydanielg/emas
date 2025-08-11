@@ -28,6 +28,9 @@ Route::middleware(['web'])->prefix('admin')->name('admin.')->group(function () {
     // Protected admin pages
     Route::middleware(['auth'])->group(function () {
         Route::get('/', [AdminPagesController::class, 'dashboard'])->name('dashboard');
+        Route::get('/users', [AdminPagesController::class, 'usersIndex'])->name('users.index');
+        Route::get('/institutions', [AdminPagesController::class, 'institutionsIndex'])->name('institutions.index');
+        Route::get('/analytics', [AdminPagesController::class, 'analyticsIndex'])->name('analytics.index');
     });
 });
 
